@@ -1,10 +1,15 @@
 package application;
 
+import java.io.IOException;
+
+import br.com.casadocodigo.livraria.produtos.Produto;
+import dao.ProdutoDAO;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -13,8 +18,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.stage.Stage;
-import repositorio.RepositorioDeProdutos;
-import br.com.casadocodigo.livraria.produtos.Produto;
 
 
 @SuppressWarnings({"unchecked", "rawtypes"})
@@ -26,7 +29,7 @@ public class Main extends Application {
 		Group group = new Group();
 		Scene scene = new Scene(group, 690, 510);
 
-		ObservableList<Produto> produtos = new RepositorioDeProdutos().lista();
+		ObservableList<Produto> produtos = new ProdutoDAO().lista();
 
 		TableView<Produto> tableView = new  TableView<>(produtos);
 
@@ -35,16 +38,16 @@ public class Main extends Application {
 		nomeColumn.setCellValueFactory(new PropertyValueFactory("nome"));
 
 		TableColumn descColumn = new TableColumn("Descrição");
-		nomeColumn.setMinWidth(230);
-		nomeColumn.setCellValueFactory(new PropertyValueFactory("descricao"));
+		descColumn.setMinWidth(230);
+		descColumn.setCellValueFactory(new PropertyValueFactory("descricao"));
 
 		TableColumn valorColumn = new TableColumn("Valor");
-		nomeColumn.setMinWidth(60);
-		nomeColumn.setCellValueFactory(new PropertyValueFactory("valor"));
+		valorColumn.setMinWidth(60);
+		valorColumn.setCellValueFactory(new PropertyValueFactory("valor"));
 
 		TableColumn isbnColumn = new TableColumn("ISBN");
-		nomeColumn.setMinWidth(180);
-		nomeColumn.setCellValueFactory(new PropertyValueFactory("isbn"));
+		isbnColumn.setMinWidth(180);
+		isbnColumn.setCellValueFactory(new PropertyValueFactory("isbn"));
 
 		tableView.getColumns().addAll(nomeColumn, descColumn, valorColumn, isbnColumn);
 
@@ -57,11 +60,24 @@ public class Main extends Application {
 
 		label.setPadding(new Insets(20, 0, 10, 10));
 
-		group.getChildren().addAll(label, vbox);
+		Button button = new Button("Exportar CVS");
+		button.setLayoutX(575);
+		button.setLayoutY(25);
+		button.setOnAction(event -> exportaEmCSV(produtos));
+
+		group.getChildren().addAll(label, vbox, button);
 
 		primaryStage.setTitle("Sistema da livraria com Java FX");
 		primaryStage.setScene(scene);
 		primaryStage.show();
+	}
+
+	private void exportaEmCSV(ObservableList<Produto> produtos) {
+		try {
+			new Exportador().paraCSV(produtos);
+			} catch (IOException e) {
+				System.out.println("Error: " + e.getMessage());
+			}
 	}
 
 	public static void main(String[] args) {
