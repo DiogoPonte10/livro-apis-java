@@ -6,6 +6,7 @@ import br.com.casadocodigo.livraria.produtos.Produto;
 import dao.ProdutoDAO;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -63,9 +64,30 @@ public class Main extends Application {
 		Button button = new Button("Exportar CVS");
 		button.setLayoutX(575);
 		button.setLayoutY(25);
-		button.setOnAction(event -> exportaEmCSV(produtos));
 
-		group.getChildren().addAll(label, vbox, button);
+		Label progresso = new Label();
+		progresso.setLayoutX(490);
+		progresso.setLayoutY(30);
+
+		button.setOnAction(event -> {
+
+			Task<Void> task = new Task<Void>() {
+				@Override
+				protected Void call() throws Exception {
+				dormePorDezSegundos();
+				exportaEmCSV(produtos);
+				return null;
+				}
+			};
+
+			task.setOnRunning(e -> progresso.setText("Exportando..."));
+
+			task.setOnSucceeded(e -> progresso.setText("Concluído!"));
+
+			new Thread(task).start();
+		});
+
+		group.getChildren().addAll(label, vbox, button, progresso);
 
 		primaryStage.setTitle("Sistema da livraria com Java FX");
 		primaryStage.setScene(scene);
@@ -78,6 +100,14 @@ public class Main extends Application {
 			} catch (IOException e) {
 				System.out.println("Error: " + e.getMessage());
 			}
+	}
+
+	private void dormePorDezSegundos() {
+		try {
+			Thread.sleep(10000);
+		} catch (InterruptedException e) {
+			System.out.println("Error: " + e.getMessage());
+		}
 	}
 
 	public static void main(String[] args) {
