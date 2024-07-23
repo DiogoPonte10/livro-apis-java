@@ -12,13 +12,11 @@
 	-fx-translate-y: 30;
 }
 
-.table-view {
-	-fx-min-width: 665;
-	-fx-max-width: 665;
-}
+#label-footer {
+	-fx-font-size: 15px;
+	-fx-translate-x: 290;
+	-fx-translate-y: 480;
 
-.table-column {
-	-fx-padding: 0 0 0 10;
 }
 
 .button {
@@ -33,10 +31,4 @@
 
 .button:hover {
 	-fx-background-color: rgba(31, 149, 206, 0.71);
-}
-
-#label-footer {
-	-fx-font-size: 15px;
-	-fx-translate-x: 260;
-	-fx-translate-y: 480;
 }
