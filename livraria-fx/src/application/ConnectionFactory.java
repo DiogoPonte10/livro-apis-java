@@ -6,6 +6,10 @@ import java.sql.SQLException;
 
 public class ConnectionFactory {
 
+	/**
+	 *
+	 * @return conexão com o banco de dados
+	 */
 	public Connection getConnection() {
 		String url = "jdbc:mysql://localhost/livraria";
 		try {

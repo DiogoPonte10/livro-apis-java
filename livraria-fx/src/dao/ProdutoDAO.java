@@ -12,8 +12,19 @@ import br.com.casadocodigo.livraria.produtos.Produto;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+/**
+ *
+ * @author DIOGO
+ *
+ */
 public class ProdutoDAO {
 
+	/**
+	 * Lista todos os produtos do banco de dados
+	 *
+	 * @return {@link ObservableList} com todos os produtos
+	 * @throws RuntimeException em caso de erros
+	 */
 	public ObservableList<Produto> lista() {
 
 		ObservableList<Produto> produtos = FXCollections.observableArrayList();
@@ -42,6 +53,11 @@ public class ProdutoDAO {
 		return produtos;
 	}
 
+	/**
+	 *
+	 * @param produto que deverá ser adicionado no banco de dados.
+	 * @throws RuntimeException em caso de erros
+	 */
 	public void adiciona(Produto produto) {
 
 		PreparedStatement ps;
